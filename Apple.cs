@@ -14,8 +14,8 @@ namespace Snake_Console_Game
         {
             Random random = new Random();
 
-            AppleX = random.Next(1, 1);
-            AppleY = random.Next(1, 25);
+            AppleX = random.Next(1, 50);
+            AppleY = random.Next(1, 24);
 
             if (true)
             {

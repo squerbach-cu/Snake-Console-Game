@@ -37,14 +37,14 @@ namespace Snake_Console_Game
 
             while (true)
             {
-                Thread.Sleep(200);
-
-                Snake.MoveSnakeLL(e.Move);
+                Thread.Sleep(250);
 
                 if (Console.KeyAvailable)
                 {
                     Snake.ControlSnakeLL(Console.ReadKey(true));
                 }
+
+                Snake.MoveSnakeLL(e.Move);                
 
                 if (Snake.IsLost(Board.Width, Board.Height))
                 {
