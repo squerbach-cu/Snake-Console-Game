@@ -10,12 +10,12 @@ namespace Snake_Console_Game
     {
         private int AppleX { get; set; }
         private int AppleY { get; set; }
-        public void PlaceApple(Snake snake)
+        public void PlaceApple(Snake snake, Board board)
         {
             Random random = new Random();
-
-            AppleX = random.Next(1, 50);
-            AppleY = random.Next(1, 24);
+            
+            AppleX = random.Next(1, board.Width);
+            AppleY = random.Next(1, board.Height);
 
             if (true)
             {
@@ -23,7 +23,7 @@ namespace Snake_Console_Game
                 {
                     if (s.x == AppleX && s.y == AppleY)
                     {
-                        PlaceApple(snake);
+                        PlaceApple(snake, board);
                         return;
                     }
                 }

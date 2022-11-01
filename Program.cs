@@ -4,10 +4,10 @@ namespace Snake_Console_Game
 {
     internal class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Game Snake = new Game();
-            Snake.Run();  
+            Game snake = new Game();
+            snake.Run(false);  
         }
    }
 }

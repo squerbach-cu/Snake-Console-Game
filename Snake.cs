@@ -30,11 +30,12 @@ namespace Snake_Console_Game
     }
     public class Snake
     {
+        public LinkedList<Coordinates> snakeList { get; set; }
         private int SnakeLength { get; set; } 
         private Direction MoveDirection { get; set; } = Direction.Up;  
         private bool StillDigesting { get; set; }
 
-        public void ControlSnakeLL(ConsoleKeyInfo consoleKeyInfo)
+        public void ControlSnake(ConsoleKeyInfo consoleKeyInfo)
         {
             switch (consoleKeyInfo.Key)
             {
@@ -67,11 +68,9 @@ namespace Snake_Console_Game
                     }
                     break;
             }
-        }        
-
-        public LinkedList<Coordinates> snakeList { get; set; }
-
-        public void InitLinkedListSnake()
+        }  
+        
+        public void InitSnake(Board board)
         {
             snakeList = new LinkedList<Coordinates>();
             
@@ -79,13 +78,13 @@ namespace Snake_Console_Game
 
             for (int i = 0; i < SnakeLength; i++)
             {
-                Coordinates coordinatesNode = new Coordinates(25, 10 + i);
+                Coordinates coordinatesNode = new Coordinates(board.Width / 2, board.Height / 2 + i);
                 LinkedListNode<Coordinates> lln = new LinkedListNode<Coordinates>(coordinatesNode);
                 snakeList.AddLast(lln);
             }
         }
 
-        public void PrintLLSnakeInit()
+        public void PrintSnakeInit()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             foreach (Coordinates item in snakeList)
@@ -95,7 +94,7 @@ namespace Snake_Console_Game
             }
             Console.ForegroundColor = ConsoleColor.White;
         }
-        public void PrintLLSnake()
+        public void PrintSnake()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.SetCursorPosition(snakeList.First.Value.x, snakeList.First.Value.y);
@@ -105,7 +104,7 @@ namespace Snake_Console_Game
             Console.Write(" ");
         }
 
-        public void MoveSnakeLL(e order)
+        public void MoveSnake(e order)
         {
             if (StillDigesting)
             {
@@ -140,16 +139,22 @@ namespace Snake_Console_Game
             }
             if (order == e.Digest)
             {
-                PrintLLSnake();
+                PrintSnake();
                 StillDigesting = true;
             }
             else if (order == e.Move)
             {
-                PrintLLSnake();
+                PrintSnake();
                 snakeList.RemoveLast();
             }
         }
-
+        
+        /// <summary>
+        /// Checks if the Snake hit itself or the border and colors the the spot the snake hit in red
+        /// </summary>
+        /// <param name="gameWidth"></param>
+        /// <param name="gameHeight"></param>
+        /// <returns></returns>
         public bool IsLost(int gameWidth, int gameHeight)
         {
             //Check if snake hit itself
@@ -157,6 +162,7 @@ namespace Snake_Console_Game
             {
                 if (s.x == snakeList.First.Value.x && s.y == snakeList.First.Value.y)
                 {
+                    ChangeHitColor(snakeList.First.Value.x, snakeList.First.Value.y);
                     return true;
                 }
             }
@@ -165,15 +171,34 @@ namespace Snake_Console_Game
             //    return true;            
 
             //Check if snake hit border
-            if (snakeList.First.Value.x == 0 || snakeList.First.Value.x == gameWidth || snakeList.First.Value.y == 0 || snakeList.First.Value.y == gameHeight)
+            if (snakeList.First.Value.x == 0 || snakeList.First.Value.x == gameWidth|| snakeList.First.Value.y == 0 || snakeList.First.Value.y == gameHeight)
             {
+                ChangeHitColor(snakeList.First.Value.x, snakeList.First.Value.y);
                 return true;
             }
             return false;            
         }
+        
+        /// <summary>
+        /// Calls the MoveSnake() methode so it can grow the snake linked list by one node.
+        /// </summary>
+        /// <param name="apple"></param>
         public void DigestApple(Apple apple)
         {
-            MoveSnakeLL(e.Digest);            
+            MoveSnake(e.Digest);            
+        }
+
+        /// <summary>
+        /// Changes the color of the ■ spot the snake hit itself or the border.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        private void ChangeHitColor(int x, int y)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(x, y);
+            Console.Write("■");
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 }
